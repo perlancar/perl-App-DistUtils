@@ -1,0 +1,69 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use App::DistUtils;
+use App::PMUtils;
+use Perinci::CmdLine::Any -prefer_lite=>1;
+use Perinci::Object;
+
+our %SPEC;
+
+$SPEC{packlist_for} = {
+    v => 1.1,
+    summary => 'Locate .packlist for a Perl module',
+    args => {
+        module => {
+            schema => ['array*', of=>'str*', min_len=>1],
+            req    => 1,
+            pos    => 0,
+            greedy => 1,
+            element_completion => $App::PMUtils::_complete_module,
+        },
+    },
+    "cmdline.default_format" => 'text-simple',
+};
+sub packlist_for {
+    require Dist::Util;
+    my %args = @_;
+
+    my $mods = $args{module};
+
+    my @res;
+    my $envres = envresmulti([200,"OK",\@res]);
+    for my $mod (@$mods) {
+        my $packlist = Dist::Util::packlist_for($mod);
+        if (defined $packlist) {
+            $envres->add_result(200, "OK", {item_id=>$mod});
+            push @res, @$mods > 1 ?
+                {module=>$mod, packlist=>$packlist} :
+                    $packlist;
+        } else {
+            $envres->add_result(404, "Not found", {item_id=>$mod});
+        }
+    }
+    $envres->as_struct;
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/packlist_for",
+)->run;
+
+# ABSTRACT: Locate .packlist for installed Perl module
+# PODNAME: packlist-for
+
+=head1 SYNOPSIS
+
+ % packlist-for Text::ANSITable Foo
+ Text::ANSITable: /home/steven/perl5/perlbrew/perls/perl-5.18.2/lib/site_perl/5.18.2/x86_64-linux/auto/Text/ANSITable/.packlist
+ packlist for Foo not found
+
+
+=head1 DESCRIPTION
+
+=cut
