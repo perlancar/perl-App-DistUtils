@@ -13,15 +13,16 @@ use Perinci::CmdLine::Any -prefer_lite=>1;
 
 our %SPEC;
 
-$SPEC{list_dist_modules} = {
+$SPEC{list_dist_contents} = {
     v => 1.1,
-    summary => 'List modules that come with an installed Perl distributions',
+    summary => 'List contents of an installed Perl distribution',
     args => {
         dist => {
             schema => 'str*',
             req => 1,
             pos => 0,
             completion => sub {
+                # XXX move to App::DistUtils to avoid duplication
                 require Complete::Util;
 
                 my %args = @_;
@@ -38,22 +39,26 @@ $SPEC{list_dist_modules} = {
     },
     "cmdline.default_format" => 'text-simple',
 };
-sub list_dist_modules {
+sub list_dist_contents {
     my %args = @_;
 
-    [200, "OK", [Dist::Util::list_dist_modules($args{dist})]];
+    my $dist = $args{dist};
+    $dist =~ s/-/::/g;
+    my $packlist = Dist::Util::packlist_for($dist);
+    return [404, "Can't find .packlist for $dist"] unless $packlist;
+    [200, "OK", do { local $/; open my($fh), "<", $packlist; ~~<$fh> }];
 }
 
 Perinci::CmdLine::Any->new(
-    url => "/main/list_dist_modules",
+    url => "/main/list_dist_contents",
 )->run;
 
-# ABSTRACT: List modules that come with an installed Perl distributions
-# PODNAME: list-dist-modules
+# ABSTRACT: List contents of an installed Perl distribution
+# PODNAME: list-dist-contents
 
 =head1 SYNOPSIS
 
- % list-dist-modules Text-ANSITable
+ % list-dist-contents Text-ANSITable
 
 
 =head1 DESCRIPTION
