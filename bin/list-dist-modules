@@ -1,0 +1,61 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Dist::Util ();
+use Perinci::CmdLine::Any -prefer_lite=>1;
+
+our %SPEC;
+
+$SPEC{list_dist_modules} = {
+    v => 1.1,
+    summary => 'List modules that come with an installed Perl distributions',
+    args => {
+        dist => {
+            schema => 'str*',
+            req => 1,
+            pos => 0,
+            completion => sub {
+                require Complete::Util;
+
+                my %args = @_;
+
+                my $word = $args{word} // '';
+                $word =~ s!/|::!-!g;
+                Complete::Util::complete_array_elem(
+                    word=>$word,
+                    array=>[Dist::Util::list_dists],
+                    ci=>1,
+                );
+            },
+        },
+    },
+    "cmdline.default_format" => 'text-simple',
+};
+sub list_dist_modules {
+    my %args = @_;
+
+    [200, "OK", [Dist::Util::list_dist_modules($args{dist})]];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/list_dist_modules",
+)->run;
+
+# ABSTRACT: List modules that come with an installed Perl distributions
+# PODNAME: list-dists
+
+=head1 SYNOPSIS
+
+ % list-dists
+
+
+=head1 DESCRIPTION
+
+=cut

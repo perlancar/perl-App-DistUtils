@@ -7,7 +7,7 @@ use 5.010;
 use strict;
 use warnings;
 
-use App::DistUtils;
+#use App::DistUtils;
 use App::PMUtils;
 use Perinci::CmdLine::Any -prefer_lite=>1;
 use Perinci::Object;
