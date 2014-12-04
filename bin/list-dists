@@ -1,0 +1,43 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use App::DistUtils;
+use Perinci::CmdLine::Any -prefer_lite=>1;
+
+our %SPEC;
+
+$SPEC{list_dists} = {
+    v => 1.1,
+    summary => 'List installed Perl distributions',
+    args => {
+    },
+    "cmdline.default_format" => 'text-simple',
+};
+sub list_dists {
+    require Dist::Util;
+    my %args = @_;
+
+    [200, "OK", [Dist::Util::list_dists()]];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/list_dists",
+)->run;
+
+# ABSTRACT: List installed Perl distributions
+# PODNAME: list-dists
+
+=head1 SYNOPSIS
+
+ % list-dists
+
+
+=head1 DESCRIPTION
+
+=cut
