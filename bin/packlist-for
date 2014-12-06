@@ -37,6 +37,7 @@ sub packlist_for {
     my @res;
     my $envres = envresmulti([200,"OK",\@res]);
     for my $mod (@$mods) {
+        $mod =~ s!-!::!g;
         my $packlist = Dist::Util::packlist_for($mod);
         if (defined $packlist) {
             $envres->add_result(200, "OK", {item_id=>$mod});
