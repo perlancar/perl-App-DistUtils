@@ -1,5 +1,11 @@
 Revision history for App-DistUtils
 
+0.02    2014-12-06 (PERLANCAR)
+
+	- packlist-for: accept Foo-Bar in addition to Foo::Bar, for
+	  convenience.
+
+
 0.01    2014-12-04 (PERLANCAR)
 
         - First release.
