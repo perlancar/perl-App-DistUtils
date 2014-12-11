@@ -7,9 +7,8 @@ use 5.010;
 use strict;
 use warnings;
 
-#use App::DistUtils;
-use Dist::Util ();
-use List::Util qw(first);
+use App::DistUtils;
+#use List::Util qw(first);
 use Perinci::CmdLine::Any -prefer_lite=>1;
 use Perinci::Object;
 
@@ -24,20 +23,7 @@ $SPEC{uninstall_dist} = {
             req => 1,
             pos => 0,
             greedy => 1,
-            element_completion => sub {
-                # XXX move to App::DistUtils to avoid duplication
-                require Complete::Util;
-
-                my %args = @_;
-
-                my $word = $args{word} // '';
-                $word =~ s!/|::!-!g;
-                Complete::Util::complete_array_elem(
-                    word=>$word,
-                    array=>[Dist::Util::list_dists],
-                    ci=>1,
-                );
-            },
+            element_completion => $App::DistUtils::_complete_dist,
         },
     },
     deps => {

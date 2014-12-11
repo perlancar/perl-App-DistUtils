@@ -7,7 +7,7 @@ use 5.010;
 use strict;
 use warnings;
 
-#use App::DistUtils;
+use App::DistUtils;
 use Dist::Util ();
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
@@ -21,20 +21,7 @@ $SPEC{list_dist_contents} = {
             schema => 'str*',
             req => 1,
             pos => 0,
-            completion => sub {
-                # XXX move to App::DistUtils to avoid duplication
-                require Complete::Util;
-
-                my %args = @_;
-
-                my $word = $args{word} // '';
-                $word =~ s!/|::!-!g;
-                Complete::Util::complete_array_elem(
-                    word=>$word,
-                    array=>[Dist::Util::list_dists],
-                    ci=>1,
-                );
-            },
+            completion => $App::DistUtils::_complete_dist,
         },
     },
     "cmdline.default_format" => 'text-simple',
