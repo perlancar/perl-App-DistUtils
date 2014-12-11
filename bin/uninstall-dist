@@ -1,0 +1,99 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Dist::Util ();
+use List::Util qw(first);
+use Perinci::CmdLine::Any -prefer_lite=>1;
+use Perinci::Object;
+
+our %SPEC;
+
+$SPEC{uninstall_dist} = {
+    v => 1.1,
+    summary => 'Uninstall a Perl distribution',
+    args => {
+        dist => {
+            schema => ['array*', of=>'str*', min_len=>1],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            element_completion => sub {
+                # XXX move to App::DistUtils to avoid duplication
+                require Complete::Util;
+
+                my %args = @_;
+
+                my $word = $args{word} // '';
+                $word =~ s!/|::!-!g;
+                Complete::Util::complete_array_elem(
+                    word=>$word,
+                    array=>[Dist::Util::list_dists],
+                    ci=>1,
+                );
+            },
+        },
+    },
+    deps => {
+        prog => 'cpanm',
+    },
+};
+sub uninstall_dist {
+    my %args = @_;
+
+    my $res = envresmulti();
+    my $dists = $args{dist};
+
+    for my $dist0 (@$dists) {
+        (my $dist = $dist0) =~ s/-/::/g;
+        my $packlist = Dist::Util::packlist_for($dist);
+        unless ($packlist) {
+            $res->add_result(404, "Can't find .packlist for $dist0",
+                             {item_id=>$dist0});
+            next;
+        }
+
+        # the easy way
+        my $mod = $dist;
+
+        # the proper way
+        #@lines = do { open my($fh), "<", $packlist; map {chomp} <$fh> };
+        ## find the first module for module name to feed to cpanm
+        #my $mod = first { /\.pm\z/ } @lines;
+        ## XXX read package declaration from module file
+
+        system "cpanm", "--uninstall", $mod;
+
+        if ($?) {
+            $res->add_result(500, "Uninstall $dist0 failed: $!",
+                             {item_id=>$dist0});
+        } else {
+            $res->add_result(200, "OK",
+                             {item_id=>$dist0});
+        }
+    }
+
+    $res->as_struct;
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/uninstall_dist",
+)->run;
+
+# ABSTRACT: List contents of an installed Perl distribution
+# PODNAME: list-dist-contents
+
+=head1 SYNOPSIS
+
+ % list-dist-contents Text-ANSITable
+
+
+=head1 DESCRIPTION
+
+=cut
