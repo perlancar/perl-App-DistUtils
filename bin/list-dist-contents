@@ -24,7 +24,6 @@ $SPEC{list_dist_contents} = {
             completion => $App::DistUtils::_complete_dist,
         },
     },
-    "cmdline.default_format" => 'text-simple',
 };
 sub list_dist_contents {
     my %args = @_;

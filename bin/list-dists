@@ -17,7 +17,6 @@ $SPEC{list_dists} = {
     summary => 'List installed Perl distributions',
     args => {
     },
-    "cmdline.default_format" => 'text-simple',
 };
 sub list_dists {
     require Dist::Util;

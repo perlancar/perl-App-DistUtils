@@ -26,7 +26,6 @@ $SPEC{packlist_for} = {
             element_completion => $App::PMUtils::_complete_module,
         },
     },
-    "cmdline.default_format" => 'text-simple',
 };
 sub packlist_for {
     require Dist::Util;
