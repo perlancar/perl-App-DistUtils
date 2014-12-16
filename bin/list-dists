@@ -30,7 +30,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List installed Perl distributions
-# PODNAME: list-dists
+# PODNAME:
 
 =head1 SYNOPSIS
 

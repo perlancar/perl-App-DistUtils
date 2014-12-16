@@ -55,7 +55,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: Locate .packlist for installed Perl module
-# PODNAME: packlist-for
+# PODNAME:
 
 =head1 SYNOPSIS
 

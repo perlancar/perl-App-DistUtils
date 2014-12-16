@@ -36,7 +36,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List modules that come with an installed Perl distributions
-# PODNAME: list-dist-modules
+# PODNAME:
 
 =head1 SYNOPSIS
 

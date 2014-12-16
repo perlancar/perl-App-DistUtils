@@ -73,7 +73,7 @@ Perinci::CmdLine::Any->new(
 )->run;
 
 # ABSTRACT: List contents of an installed Perl distribution
-# PODNAME: list-dist-contents
+# PODNAME:
 
 =head1 SYNOPSIS
 
