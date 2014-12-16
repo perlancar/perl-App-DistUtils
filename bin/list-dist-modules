@@ -35,7 +35,7 @@ Perinci::CmdLine::Any->new(
     url => "/main/list_dist_modules",
 )->run;
 
-# ABSTRACT: List modules that come with an installed Perl distributions
+# ABSTRACT: 
 # PODNAME:
 
 =head1 SYNOPSIS
