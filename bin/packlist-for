@@ -7,8 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-#use App::DistUtils;
-use App::PMUtils;
 use Perinci::CmdLine::Any -prefer_lite=>1;
 use Perinci::Object;
 
@@ -23,7 +21,11 @@ $SPEC{packlist_for} = {
             req    => 1,
             pos    => 0,
             greedy => 1,
-            element_completion => $App::PMUtils::_complete_module,
+            element_completion => sub {
+                require Complete::Module;
+                my %args = @_;
+                Complete::Module::complete_module(word=>$args{word});
+            },
         },
     },
 };
@@ -36,7 +38,7 @@ sub packlist_for {
     my @res;
     my $envres = envresmulti([200,"OK",\@res]);
     for my $mod (@$mods) {
-        $mod =~ s!-!::!g;
+        $mod =~ s!(-|/)!::!g;
         my $packlist = Dist::Util::packlist_for($mod);
         if (defined $packlist) {
             $envres->add_result(200, "OK", {item_id=>$mod});
@@ -54,7 +56,7 @@ Perinci::CmdLine::Any->new(
     url => "/main/packlist_for",
 )->run;
 
-# ABSTRACT: 
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS
