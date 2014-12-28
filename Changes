@@ -1,5 +1,14 @@
 Revision history for App-DistUtils
 
+0.04    2014-12-28 (PERLANCAR)
+
+	- No functional changes.
+
+	- Use Complete::Dist.
+
+	- Replace App::PMUtils with depending on Complete::Module directly.
+
+
 0.03    2014-12-12 (PERLANCAR)
 
         - Add utility: uninstall-dist.
