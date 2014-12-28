@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use App::DistUtils;
 #use List::Util qw(first);
 use Perinci::CmdLine::Any -prefer_lite=>1;
 use Perinci::Object;
@@ -23,7 +22,11 @@ $SPEC{uninstall_dist} = {
             req => 1,
             pos => 0,
             greedy => 1,
-            element_completion => $App::DistUtils::_complete_dist,
+            element_completion => sub {
+                require Complete::Dist;
+                my %args = @_;
+                Complete::Dist::complete_dist(word=>$args{word});
+            },
         },
     },
     deps => {
@@ -72,7 +75,7 @@ Perinci::CmdLine::Any->new(
     url => "/main/uninstall_dist",
 )->run;
 
-# ABSTRACT: 
+# ABSTRACT:
 # PODNAME:
 
 =head1 SYNOPSIS

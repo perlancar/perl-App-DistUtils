@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use App::DistUtils;
 use Dist::Util ();
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
@@ -21,7 +20,11 @@ $SPEC{list_dist_contents} = {
             schema => 'str*',
             req => 1,
             pos => 0,
-            completion => $App::DistUtils::_complete_dist,
+            completion => sub {
+                require Complete::Dist;
+                my %args = @_;
+                Complete::Dist::complete_dist(word=>$args{word});
+            },
         },
     },
 };
