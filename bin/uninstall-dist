@@ -28,6 +28,10 @@ $SPEC{uninstall_dist} = {
                 Complete::Dist::complete_dist(word=>$args{word});
             },
         },
+        force => {
+            schema => 'bool',
+            cmdline_aliases => {f=>{}},
+        },
     },
     deps => {
         prog => 'cpanm',
@@ -59,7 +63,7 @@ sub uninstall_dist {
         #my $mod = first { /\.pm\z/ } @lines;
         ## XXX read package declaration from module file
 
-        system "cpanm", "--uninstall", $mod;
+        system "cpanm", "--uninstall", (('--force') x !!$args{force}), $mod;
 
         if ($?) {
             $res->add_result(500, "Uninstall $dist0 failed: $!",
