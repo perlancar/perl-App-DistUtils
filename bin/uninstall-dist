@@ -34,6 +34,8 @@ $SPEC{uninstall_dist} = {
     },
 };
 sub uninstall_dist {
+    require Dist::Util;
+
     my %args = @_;
 
     my $res = envresmulti();

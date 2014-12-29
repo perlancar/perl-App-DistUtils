@@ -19,6 +19,7 @@ $SPEC{list_dists} = {
 };
 sub list_dists {
     require Dist::Util;
+
     my %args = @_;
 
     [200, "OK", [Dist::Util::list_dists()]];

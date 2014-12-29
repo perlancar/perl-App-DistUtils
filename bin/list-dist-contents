@@ -7,7 +7,6 @@ use 5.010;
 use strict;
 use warnings;
 
-use Dist::Util ();
 use Perinci::CmdLine::Any -prefer_lite=>1;
 
 our %SPEC;
@@ -29,6 +28,8 @@ $SPEC{list_dist_contents} = {
     },
 };
 sub list_dist_contents {
+    require Dist::Util;
+
     my %args = @_;
 
     my $dist = $args{dist};

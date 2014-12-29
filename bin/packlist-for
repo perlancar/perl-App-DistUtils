@@ -31,6 +31,7 @@ $SPEC{packlist_for} = {
 };
 sub packlist_for {
     require Dist::Util;
+
     my %args = @_;
 
     my $mods = $args{module};
