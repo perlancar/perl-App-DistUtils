@@ -1,5 +1,12 @@
 Revision history for App-DistUtils
 
+0.05    2014-12-29 (PERLANCAR)
+
+	- Add --force (-f) option to uninstall-dist.
+
+	- [Bugfix] Forgot to require Dist::Util.
+
+
 0.04    2014-12-28 (PERLANCAR)
 
 	- No functional changes.
