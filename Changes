@@ -1,5 +1,10 @@
 Revision history for App-DistUtils
 
+0.06    2015-03-20 (PERLANCAR)
+
+        - Add script: dist-dir.
+
+
 0.05    2014-12-29 (PERLANCAR)
 
 	- Add --force (-f) option to uninstall-dist.
