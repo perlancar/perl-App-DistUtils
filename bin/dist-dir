@@ -12,23 +12,23 @@ use Perinci::CmdLine::Any;
 
 our %SPEC;
 
-$SPEC{list_dist_modules} = {
+$SPEC{dist_dir} = {
     v => 1.1,
-    summary => 'List modules that come with an installed Perl distributions',
+    summary => 'Get per-dist directory',
     args => {
         %App::DistUtils::dist_arg_single,
     },
 };
-sub list_dist_modules {
-    require Dist::Util;
+sub dist_dir {
+    require File::ShareDir;
 
     my %args = @_;
 
-    [200, "OK", [Dist::Util::list_dist_modules($args{dist})]];
+    [200, "OK", File::ShareDir::dist_dir($args{dist})];
 }
 
 Perinci::CmdLine::Any->new(
-    url => "/main/list_dist_modules",
+    url => "/main/dist_dir",
 )->run;
 
 # ABSTRACT:
@@ -36,7 +36,7 @@ Perinci::CmdLine::Any->new(
 
 =head1 SYNOPSIS
 
- % list-dist-modules Text-ANSITable
+ % dist-dir IOD-Examples
 
 
 =head1 DESCRIPTION
