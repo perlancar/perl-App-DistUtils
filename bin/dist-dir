@@ -37,6 +37,7 @@ Perinci::CmdLine::Any->new(
 =head1 SYNOPSIS
 
  % dist-dir IOD-Examples
+ /home/ujang/perl5/perlbrew/perls/perl-5.18.4/lib/site_perl/5.18.4/auto/share/dist/IOD-Examples
 
 
 =head1 DESCRIPTION
