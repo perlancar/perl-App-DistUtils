@@ -1,5 +1,13 @@
 Revision history for App-DistUtils
 
+0.07    2015-03-21 (PERLANCAR)
+
+	- No functional changes.
+
+	- [Documentation] Mention list of utilities in main module, add FAQ
+	  & See Also.
+
+
 0.06    2015-03-20 (PERLANCAR)
 
         - Add script: dist-dir.
