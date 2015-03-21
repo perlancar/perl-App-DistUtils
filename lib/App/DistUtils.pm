@@ -37,12 +37,21 @@ our %dist_arg_multiple = (
 
 =head1 SYNOPSIS
 
-This distribution provides several command-line utilities related to
-Perl distributions.
+This distribution provides the following command-line utilities related to Perl
+distributions:
+
+#INSERT_EXECS_LIST
+
+The main feature of these utilities is tab completion.
+
+
+=head1 FAQ
+
+#INSERT_BLOCK: App::PMUtils faq
 
 
 =head1 SEE ALSO
 
-L<Dist::Util>
+#INSERT_BLOCK: App::PMUtils see_also
 
 =cut
