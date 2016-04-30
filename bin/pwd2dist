@@ -1,0 +1,62 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{pwd2dist} = {
+    v => 1.1,
+    summary => 'Try to guess/extract dist name from current directory',
+    description => <<'_',
+
+Will return `.` if dist name cannot be guessed.
+
+_
+    args => {
+    },
+    result_naked => 1,
+};
+sub pwd2dist {
+    my %args = @_;
+
+    my $cwd = $ENV{PWD} // do { require Cwd; Cwd::cwd() };
+
+    $cwd =~ s!.+[/\\]!!;
+    $cwd =~ s/^(perl|cpan|p5|pl)-//;
+    $cwd =~ /\A\w+(-\w+)*\z/ ? $cwd : ".";
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/pwd2dist",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+ % pwd
+ /home/ujang/proj/perl-Foo-Bar
+
+ % pwd2dist
+ Foo-Bar
+
+ % cd
+ % pwd
+ /home/ujang
+
+ % pwd2dist
+ .
+
+
+=head1 SEE ALSO
+
+L<pwd2mod>

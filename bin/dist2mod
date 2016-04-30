@@ -1,0 +1,78 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{dist2mod} = {
+    v => 1.1,
+    summary => 'Convert dist name to module name',
+    description => <<'_',
+
+If something doesn't look like a dist name, it will be passed as-is.
+
+_
+    args => {
+        dists => {
+            schema => ['array*', of=>'str*'],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            cmdline_src => 'stdin_or_args',
+        },
+    },
+};
+sub dist2mod {
+    my %args = @_;
+    my $dists = $args{dists};
+
+    my @res;
+    for my $dist (@$dists) {
+        if ($dist !~ /\A\w+(-\w+)*\z/) {
+            push @res, $dist;
+            next;
+        }
+        $dist =~ s/-/::/g;
+        push @res, $dist;
+    }
+
+    [200, "OK", \@res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/dist2mod",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+Accepts input from the command-line arguments:
+
+ % dist2mod Foo-Bar Baz-Qux 123
+ Foo::Bar
+ Baz::Qux
+ 123
+
+Also accepts input from stdin:
+
+ % echo -e "Foo-Bar\nBaz-Qux\n123" | dist2mod
+ Foo::Bar
+ Baz::Qux
+ 123
+
+
+=head1 SEE ALSO
+
+L<mod2dist>.
+
+Subcommands C<mod2dist>, C<dist2mod> (and some others) in L<lcpan>.
