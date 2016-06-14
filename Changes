@@ -1,5 +1,13 @@
 Revision history for App-DistUtils
 
+0.10    2016-06-14 (PERLANCAR)
+
+	- Add utilities: dir2dist, dir2mod.
+
+	- [dist] [Bugfix] stdin_or_args was introduced in Rinci 1.1.79, not
+	  1.1.75.
+
+
 0.09    2016-04-30 (PERLANCAR)
 
 	- Add utilities: dist2mod, mod2dist, pwd2dist.
