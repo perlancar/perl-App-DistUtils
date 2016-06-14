@@ -1,5 +1,10 @@
 Revision history for App-DistUtils
 
+0.11    2016-06-14 (PERLANCAR)
+
+	- Add missing pwd2mod.
+
+
 0.10    2016-06-14 (PERLANCAR)
 
 	- Add utilities: dir2dist, dir2mod.
