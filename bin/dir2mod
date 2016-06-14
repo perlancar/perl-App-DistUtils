@@ -87,3 +87,5 @@ Also accepts input from stdin:
 =head1 SEE ALSO
 
 L<dir2dist>
+
+L<pwd2mod>, L<pwd2dist>

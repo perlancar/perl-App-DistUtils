@@ -12,30 +12,31 @@ use Perinci::CmdLine::Any;
 
 our %SPEC;
 
-$SPEC{pwd2dist} = {
+$SPEC{pwd2mod} = {
     v => 1.1,
-    summary => 'Try to guess/extract dist name from current directory',
+    summary => 'Try to guess/extract module name from current directory',
     description => <<'_',
 
-Will return `.` if dist name cannot be guessed.
+Will return `.` if module name cannot be guessed.
 
 _
     args => {
     },
     result_naked => 1,
 };
-sub pwd2dist {
+sub pwd2mod {
     my %args = @_;
 
     my $cwd = $ENV{PWD} // do { require Cwd; Cwd::cwd() };
 
     $cwd =~ s!.+[/\\]!!;
-    $cwd =~ s/^(perl|cpan|p5|pl)-//;
-    $cwd =~ /\A\w+(-\w+)*\z/ ? $cwd : ".";
+    $cwd =~ s/^(perl5?|cpan|p5?|pl)-//;
+    $cwd =~ s/-/::/g;
+    $cwd =~ /\A\w+(::\w+)*\z/ ? $cwd : ".";
 }
 
 Perinci::CmdLine::Any->new(
-    url => "/main/pwd2dist",
+    url => "/main/pwd2mod",
 )->run;
 
 # ABSTRACT:
@@ -46,12 +47,12 @@ Perinci::CmdLine::Any->new(
  % pwd
  /home/ujang/proj/perl-Foo-Bar
 
- % pwd2dist
- Foo-Bar
+ % pwd2mod
+ Foo::Bar
 
 
 =head1 SEE ALSO
 
 L<pwd2mod>
 
-L<dir2dist>, L<dir2mod>
+L<dir2mod>, L<dir2dist>
