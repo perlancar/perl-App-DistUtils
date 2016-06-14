@@ -1,0 +1,87 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Cwd qw(abs_path);
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{dir2dist} = {
+    v => 1.1,
+    summary => 'Convert directory name to dist name',
+    description => <<'_',
+
+If directory doesn't look like a dist name, it will be passed as-is.
+
+_
+    args => {
+        dirs => {
+            schema => ['array*', of=>'str*'],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            cmdline_src => 'stdin_or_args',
+        },
+    },
+};
+sub dir2dist {
+    my %args = @_;
+    my $dirs = $args{dirs};
+
+    my @res;
+    for my $dir (@$dirs) {
+        my $dist = abs_path($dir) or do {
+            push @res, $dir;
+            next;
+        };
+        $dist =~ s!.+[/\\]!!;
+        $dist =~ s/\A(perl5?|p5?|cpan)-//i;
+
+        $dist =~ /\A\w+(-\w+)*\z/ or do {
+            push @res, $dir;
+            next;
+        };
+
+        push @res, $dist;
+    }
+
+    [200, "OK", \@res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/dir2dist",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+Accepts input from the command-line arguments:
+
+ % pwd
+ /home/ujang/repos/perl-App-DistUtils
+
+ % dir2dist . .. 123
+ App-DistUtils
+ repos
+ 123
+
+Also accepts input from stdin:
+
+ % echo -e ".\n..\n123" | dir2dist
+ App-DistUtils
+ repos
+ 123
+
+
+=head1 SEE ALSO
+
+L<dir2mod>

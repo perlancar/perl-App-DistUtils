@@ -1,0 +1,89 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Cwd qw(abs_path);
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{dir2mod} = {
+    v => 1.1,
+    summary => 'Convert directory name to module name',
+    description => <<'_',
+
+If directory doesn't look like a module name, it will be passed as-is.
+
+_
+    args => {
+        dirs => {
+            schema => ['array*', of=>'str*'],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            cmdline_src => 'stdin_or_args',
+        },
+    },
+};
+sub dir2mod {
+    my %args = @_;
+    my $dirs = $args{dirs};
+
+    my @res;
+    for my $dir (@$dirs) {
+        my $mod = abs_path($dir) or do {
+            push @res, $dir;
+            next;
+        };
+        $mod =~ s!.+[/\\]!!;
+        $mod =~ s/\A(perl5?|p5?|cpan)-//i;
+
+        $mod =~ s/-/::/g;
+
+        $mod =~ /\A\w+(::\w+)*\z/ or do {
+            push @res, $dir;
+            next;
+        };
+
+        push @res, $mod;
+    }
+
+    [200, "OK", \@res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/dir2mod",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+Accepts input from the command-line arguments:
+
+ % pwd
+ /home/ujang/repos/perl-App-DistUtils
+
+ % dir2dist . .. 123
+ App::DistUtils
+ repos
+ 123
+
+Also accepts input from stdin:
+
+ % echo -e ".\n..\n123" | dir2dist
+ App::DistUtils
+ repos
+ 123
+
+
+=head1 SEE ALSO
+
+L<dir2dist>
