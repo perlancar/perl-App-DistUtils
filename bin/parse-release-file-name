@@ -1,0 +1,72 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Cwd qw(abs_path);
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{parse_release_file_name} = {
+    v => 1.1,
+    summary => 'Parse release file name to its components',
+    args => {
+        filenames => {
+            schema => ['array*', of=>'str*'],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            cmdline_src => 'stdin_or_args',
+        },
+    },
+    result_naked => 1,
+};
+sub parse_release_file_name {
+    my %args = @_;
+    my $filenames = $args{filenames};
+
+    my @res;
+    for my $filename (@$filenames) {
+        my $res = {file => $filename};
+        if ($filename =~ /\A(\w+(?:-\w+)*)-v?(\d+[\d._]*)\.(tar\.(?:gz|bz2|xz|Z)|zip)\z/i) {
+            $res->{dist} = $1;
+            $res->{version} = $2;
+            $res->{ext} = $3;
+        }
+        push @res, $res;
+    }
+
+    \@res;
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/parse_release_file_name",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+Accepts input from the command-line arguments:
+
+ % parse-release-file-name Foo-Bar-0.01.tar.gz Baz
+ +---------+--------+---------------------+---------+
+ | dist    | ext    | file                | version |
+ +---------+--------+---------------------+---------+
+ | Foo-Bar | tar.gz | Foo-Bar-0.01.tar.gz | 0.01    |
+ |         |        | Baz                 |         |
+ +---------+--------+---------------------+---------+
+
+Also accepts input from stdin:
+
+ % echo -e "Foo-Bar-0.01.tar.gz\nBaz" | parse-release-file-name
+
+
+=head1 SEE ALSO
