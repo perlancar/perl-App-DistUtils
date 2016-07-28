@@ -7,7 +7,7 @@ use 5.010001;
 
 our %dist_arg_single = (
     dist => {
-        schema => 'str*',
+        schema => 'perl::distname*',
         req => 1,
         pos => 0,
         completion => sub {
@@ -20,7 +20,7 @@ our %dist_arg_single = (
 
 our %dist_arg_multiple = (
     dist => {
-        schema => ['array*', of=>'str*', min_len=>1],
+        schema => ['array*', of=>'perl::distname*', min_len=>1],
         req => 1,
         pos => 0,
         greedy => 1,
