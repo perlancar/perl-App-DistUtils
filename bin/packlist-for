@@ -17,7 +17,7 @@ $SPEC{packlist_for} = {
     summary => 'Locate .packlist for a Perl module',
     args => {
         module => {
-            schema => ['array*', of=>'str*', min_len=>1],
+            schema => ['array*', of=>'perl::modname*', min_len=>1],
             req    => 1,
             pos    => 0,
             greedy => 1,

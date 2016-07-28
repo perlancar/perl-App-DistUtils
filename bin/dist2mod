@@ -22,7 +22,7 @@ If something doesn't look like a dist name, it will be passed as-is.
 _
     args => {
         dists => {
-            schema => ['array*', of=>'str*'],
+            schema => ['array*', of=>'perl::distname*'],
             req => 1,
             pos => 0,
             greedy => 1,

@@ -18,7 +18,7 @@ $SPEC{parse_release_file_name} = {
     summary => 'Parse release file name to its components',
     args => {
         filenames => {
-            schema => ['array*', of=>'str*'],
+            schema => ['array*', of=>'filename*'],
             req => 1,
             pos => 0,
             greedy => 1,

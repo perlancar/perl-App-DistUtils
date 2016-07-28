@@ -23,7 +23,7 @@ If directory doesn't look like a module name, it will be passed as-is.
 _
     args => {
         dirs => {
-            schema => ['array*', of=>'str*'],
+            schema => ['array*', of=>'dirname*'],
             req => 1,
             pos => 0,
             greedy => 1,
