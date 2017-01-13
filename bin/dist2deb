@@ -1,0 +1,71 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+#use App::DistUtils;
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{dist2deb} = {
+    v => 1.1,
+    summary => 'Convert dist name to Debian package name',
+    description => <<'_',
+
+It currently uses <pm:Dist::Util::Debian>'s `dist2deb`, so caveats apply.
+
+_
+    args => {
+        dists => {
+            schema => ['array*', of=>'perl::distname*'],
+            req => 1,
+            pos => 0,
+            greedy => 1,
+            cmdline_src => 'stdin_or_args',
+        },
+    },
+};
+sub dist2deb {
+    require Dist::Util::Debian;
+
+    my %args = @_;
+    my $dists = $args{dists};
+
+    my @res;
+    for my $dist (@$dists) {
+        push @res, Dist::Util::Debian::dist2deb($dist);
+    }
+
+    [200, "OK", \@res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/dist2deb",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+Accepts input from the command-line arguments:
+
+ % dist2deb Foo-Bar Baz-Qux
+ libfoo-bar-perl
+ libbaz-qux-perl
+
+Also accepts input from stdin:
+
+ % echo -e "Foo-Bar\nBaz-Qux" | dist2deb
+ libfoo-bar-perl
+ libbaz-qux-perl
+
+
+=head1 SEE ALSO
+
+L<Dist::Util::Debian>.

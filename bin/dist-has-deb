@@ -1,0 +1,56 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+
+$SPEC{dist_has_deb} = {
+    v => 1.1,
+    summary => 'Check if dist has a corresponding Debian package',
+    args => {
+        dist => {
+            schema => ['perl::distname*'],
+            req    => 1,
+            pos    => 0,
+        },
+    },
+};
+sub dist_has_deb {
+    require Dist::Util::Debian;
+
+    my %args = @_;
+
+    [200, "OK", Dist::Util::Debian::dist_has_deb($args{dist})];
+}
+
+Perinci::CmdLine::Any->new(
+    url => "/main/dist_has_deb",
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+ % dist-has-deb HTTP::Tiny
+ 1
+
+ % dist-has-deb Foo
+ 0
+
+
+=head1 DESCRIPTION
+
+
+=head1 SEE ALSO
+
+L<Dist::Util::Debian>
+
+=cut
