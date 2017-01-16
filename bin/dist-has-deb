@@ -20,6 +20,9 @@ $SPEC{dist_has_deb} = {
             req    => 1,
             pos    => 0,
         },
+        use_allpackages => {
+            schema => 'bool*',
+        },
     },
 };
 sub dist_has_deb {
@@ -27,7 +30,10 @@ sub dist_has_deb {
 
     my %args = @_;
 
-    [200, "OK", Dist::Util::Debian::dist_has_deb($args{dist})];
+    my $opts = {};
+    $opts->{use_allpackages} = 1 if $args{use_allpackages};
+
+    [200, "OK", Dist::Util::Debian::dist_has_deb($opts, $args{dist})];
 }
 
 Perinci::CmdLine::Any->new(
