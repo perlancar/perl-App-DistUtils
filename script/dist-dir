@@ -17,14 +17,22 @@ $SPEC{dist_dir} = {
     summary => 'Get per-dist directory',
     args => {
         %App::DistUtils::dist_arg_single,
+        tarball => {
+            schema => 'bool*',
+            cmdline_aliases => {t=>{}},
+        },
     },
 };
 sub dist_dir {
-    require File::ShareDir;
-
     my %args = @_;
 
-    [200, "OK", File::ShareDir::dist_dir($args{dist})];
+    if ($args{tarball}) {
+        require File::ShareDir::Tarball;
+        [200, "OK", File::ShareDir::Tarball::dist_dir($args{dist})];
+    } else {
+        require File::ShareDir;
+        [200, "OK", File::ShareDir::dist_dir($args{dist})];
+    }
 }
 
 Perinci::CmdLine::Any->new(
