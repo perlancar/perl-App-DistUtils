@@ -2,3 +2,4 @@ App-DistUtils-*
 .build
 *~
 nytprof*
+.DS_Store
