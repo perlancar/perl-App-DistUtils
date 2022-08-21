@@ -1,13 +1,15 @@
 #!perl
 
-# DATE
-# VERSION
-
-use 5.010;
+use 5.010001;
 use strict;
 use warnings;
 
 use Perinci::CmdLine::Any;
+
+# AUTHORITY
+# DATE
+# DIST
+# VERSION
 
 our %SPEC;
 
@@ -15,6 +17,10 @@ $SPEC{list_dists} = {
     v => 1.1,
     summary => 'List installed Perl distributions',
     args => {
+        detail => {
+            schema => 'bool*',
+            cmdline_aliases => {l=>{}},
+        },
     },
 };
 sub list_dists {
@@ -22,7 +28,7 @@ sub list_dists {
 
     my %args = @_;
 
-    [200, "OK", [Dist::Util::list_dists()]];
+    [200, "OK", [Dist::Util::list_dists(%args)]];
 }
 
 Perinci::CmdLine::Any->new(

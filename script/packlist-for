@@ -1,14 +1,16 @@
 #!perl
 
-# DATE
-# VERSION
-
 use 5.010;
 use strict;
 use warnings;
 
 use Perinci::CmdLine::Any;
 use Perinci::Object;
+
+# AUTHORITY
+# DATE
+# DIST
+# VERSION
 
 our %SPEC;
 

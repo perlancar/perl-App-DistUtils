@@ -1,11 +1,13 @@
 package App::DistUtils;
 
+use 5.010001;
+use strict;
+use warnings;
+
 # AUTHORITY
 # DATE
 # DIST
 # VERSION
-
-use 5.010001;
 
 our %dist_arg_single = (
     dist => {
